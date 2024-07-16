@@ -10,6 +10,7 @@ generate-key () {
   echo "Which encryption want you use?
 (1) ed25519 - recommended
 (2) rsa
+(q) Quit
 "
   while true; do
     read -n1 -p "Encryption: " option_encryption
@@ -21,6 +22,8 @@ generate-key () {
       2) key_encryption="rsa"
         break
       ;;
+      q|Q) return
+      ;;
       *) echo -e '\033[1mPlease provide correct option\033[0m\n'
       ;;
     esac
@@ -31,8 +34,43 @@ generate-key () {
 
   #generate key
   ssh-keygen -t "$key_encryption" -f "${key_path}$key_name" -C "$key_comment"
+  echo -e '\033[1mKey generated successfully!\033[0m\n'
+}
+
+list-keys () {
+  key_list=$(ls "$key_path" | egrep -iv "authorized_keys|known_hosts|config|.pub")
+  keys_arr=($key_list)
+  numb_of_elem=${#keys_arr[@]}
+  cnt=1
+
+  for ssh_key in "${keys_arr[@]}"
+  do
+    echo "($cnt) $ssh_key"
+    cnt=$(( $cnt+1 ))
+  done
+  echo "(q) Quit"
+
+  while true; do
+    read -n1 -p "Select: " user_pick
+    echo
+    if [[ $user_pick -gt $numb_of_elem ]]; then
+      echo -e "\n\033[1mPlease provide correct number (1-$numb_of_elem)\033[0m"
+    else
+      selected_key=$(( $user_pick-1 ))
+      key_name="${keys_arr[$selected_key]}"; echo
+      break
+    fi
+  done
 }
 
 remove-key () {
-  echo "xd"
+  echo "Pick key you want to remove"
+  list-keys
+  if [[ "$user_pick" == "q" ]]; then
+    echo "Quitting"
+  else
+    rm "${key_path}$key_name" && rm "${key_path}$key_name.pub"
+    echo -e "\033[1mKey $key_name removed successfully!\033[0m\n"
+  fi
 }
+
