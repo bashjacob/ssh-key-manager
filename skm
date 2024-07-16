@@ -6,6 +6,7 @@
 #
 source $(dirname $0)/lib/launch
 source $(dirname $0)/lib/var
+source $(dirname $0)/lib/keymanager
 
 while true; do
   if [[ -e $(dirname $0)/lib/.check ]]; then
@@ -21,9 +22,12 @@ What do you want to do?
       read -n1 -p "Select: " skmoption
       echo;echo
       case "$skmoption" in
-        1) echo "Generate new SSH key"
+        1) generate-key
+          echo -e '\033[1mKey generated successfully!\033[0m\n'
+          break
         ;;
-        2) echo "Remove existing SSH key"
+        2) remove-key
+          break
         ;;
         3) echo "Copy SSH key to remote machine"
         ;;

@@ -1,0 +1,38 @@
+#!/bin/bash
+#
+#set -x
+# key_encryption key_comment key_name
+source $(dirname $0)/lib/var
+
+generate-key () {
+  #key selection
+  key_encryption=""
+  echo "Which encryption want you use?
+(1) ed25519 - recommended
+(2) rsa
+"
+  while true; do
+    read -n1 -p "Encryption: " option_encryption
+    echo
+    case "$option_encryption" in
+      1) key_encryption="ed25519"
+        break
+      ;;
+      2) key_encryption="rsa"
+        break
+      ;;
+      *) echo -e '\033[1mPlease provide correct option\033[0m\n'
+      ;;
+    esac
+  done
+  #separator comment
+  read -p "Provide a short comment for your key: " key_comment
+  read -p "Provide a unique name for your key: " key_name
+
+  #generate key
+  ssh-keygen -t "$key_encryption" -f "${key_path}$key_name" -C "$key_comment"
+}
+
+remove-key () {
+  echo "xd"
+}
