@@ -45,6 +45,7 @@ What do you want to do?
     dir_config; echo
     add_path
     touch $(dirname $0)/lib/.check
+    source $(dirname $0)/lib/var
   fi
 done
 

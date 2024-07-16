@@ -5,7 +5,7 @@
 source $(dirname $0)/lib/var
 
 add_path () {
-  path_msg="Updating your path. Please reload your shell"
+  path_msg="Updating your path. Please reload your shell to use script wherever you are!"
   echo "Adding SSHKeyManager directory to path..."
   while true; do
     read -n1 -p "
@@ -40,6 +40,7 @@ dir_config () {
     read -n1 -p "What do you want to do? " cfg_decision; echo 
     if [[ $cfg_decision == 1 ]]; then
       echo; read -p "Enter new (full) path here: " cfg_path
+      cfg_path=${cfg_path%%/}
       sed -i "s|^key_path=.*|key_path=\"$cfg_path/\"|" $(dirname $0)/lib/var; echo
       echo "> Successfully changed path to: $cfg_path"
       break
