@@ -40,7 +40,7 @@ dir_config () {
     read -n1 -p "What do you want to do? " cfg_decision; echo 
     if [[ $cfg_decision == 1 ]]; then
       echo; read -p "Enter new (full) path here: " cfg_path
-      sed -i "s/^key_path=.*/key_path=\"$cfg_path\"/" $(dirname $0)/lib/var; echo
+      sed -i "s|^key_path=.*|key_path=\"$cfg_path/\"|" $(dirname $0)/lib/var; echo
       echo "> Successfully changed path to: $cfg_path"
       break
     elif [[ $cfg_decision == 2 ]]; then
