@@ -1,0 +1,58 @@
+#!/bin/bash
+#
+#set -x
+#
+source $(dirname $0)/lib/var
+
+add_path () {
+  path_msg="Updating your path. Please reload your shell"
+  echo "Adding SSHKeyManager directory to path..."
+  while true; do
+    read -n1 -p "
+Which of the following shells do you use?
+1. bash
+2. zsh
+Option: " which_shell
+    echo;echo
+    case "$which_shell" in
+      1) $(echo "export PATH=$PATH:$(find / -name skm 2> /dev/null | xargs dirname)" >> $HOME/.bashrc)
+        echo "$path_msg"
+        break
+      ;;
+      2) $(echo "export PATH=$PATH:$(find / -name skm 2> /dev/null | xargs dirname)" >> $HOME/.zshrc)
+        echo "$path_msg"
+        break
+      ;;
+    *) echo -e '\033[1mPlease provide correct option (1 or 2)\033[0m'
+      ;;
+    esac
+  done
+}
+
+dir_config () {
+  echo "
+ 1. Set new directory for your keys
+ 2. Set as default (~/.ssh/)
+ 3. Leave as it is ($key_path)
+ "
+
+  while true; do
+    read -n1 -p "What do you want to do? " cfg_decision; echo 
+    if [[ $cfg_decision == 1 ]]; then
+      echo; read -p "Enter new (full) path here: " cfg_path
+      sed -i "s/^key_path=.*/key_path=\"$cfg_path\"/" $(dirname $0)/lib/var; echo
+      echo "> Successfully changed path to: $cfg_path"
+      break
+    elif [[ $cfg_decision == 2 ]]; then
+      sed -i "s/^key_path=.*/key_path=\"\$HOME\/\.ssh\/\"/" $(dirname $0)/lib/var; echo
+      echo "> Setting path to $HOME/.ssh/"
+      break
+    elif [[ $cfg_decision == 3 ]]; then
+      echo; echo "> Canceling..."
+      break
+    else
+      echo "$cfg_decision is invalid option, try again..."
+    fi
+  done
+}
+

@@ -1,0 +1,46 @@
+#!/bin/bash
+#
+#2024-07-11
+#xoxojacob
+#set -x
+#
+source $(dirname $0)/lib/launch
+source $(dirname $0)/lib/var
+
+while true; do
+  if [[ -e $(dirname $0)/lib/.check ]]; then
+    echo "
+What do you want to do?
+(1) Generate new SSH key
+(2) Remove existing SSH key
+(3) Copy SSH key to remote machine
+(4) Configuration
+(q) Quit
+    "
+    while true; do
+      read -n1 -p "Select: " skmoption
+      echo;echo
+      case "$skmoption" in
+        1) echo "Generate new SSH key"
+        ;;
+        2) echo "Remove existing SSH key"
+        ;;
+        3) echo "Copy SSH key to remote machine"
+        ;;
+        4) echo "Configuration"
+        ;;
+        q|Q) echo "Quit"
+          exit 0
+        ;;
+        *) echo -e '\033[1mPlease provide correct option\033[0m'
+        ;;
+      esac
+    done
+  else
+    echo "There is no config file, setting up..."
+    dir_config; echo
+    add_path
+    touch $(dirname $0)/lib/.check
+  fi
+done
+
