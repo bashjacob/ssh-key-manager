@@ -23,13 +23,13 @@ What do you want to do?
       echo;echo
       case "$skmoption" in
         1) generate-key
-          echo -e '\033[1mKey generated successfully!\033[0m\n'
           break
         ;;
         2) remove-key
           break
         ;;
-        3) echo "Copy SSH key to remote machine"
+        3) copy-id
+          break
         ;;
         4) echo "Configuration"
         ;;
