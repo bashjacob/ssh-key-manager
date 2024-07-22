@@ -77,3 +77,35 @@ remove-key () {
   fi
 }
 
+copy-id () {
+  echo "Which key you want to copy?"
+  list-keys
+  if [[ "$user_pick" == "q" ]]; then
+    echo "Quitting"
+  else
+    while true; do
+      read -n1 -p "Leave default port (22)? [y/N]: " defport
+      case "$defport" in
+        y|Y) sciport=22
+          break
+        ;;
+        n|N) read -p "Provide a port: " sciport
+          break
+        ;;
+        *) echo "Wrong answer"
+        ;;
+      esac
+      
+    done
+    echo
+    read -p "User: " sciuser
+    read -p "Address: " scihostname
+    read -p "Provide alias for this connection: " scialias
+    ssh-copy-id -i "${key_path}$key_name" -p $sciport "${sciuser}@$scihostname" && echo "
+Host $scialias
+  Hostname='$scihostname'
+  Port=$sciport
+  User=$sciuser
+  IdentityFile ${key_path}$key_name" >> $HOME/.ssh/config && echo -e "\033[1mNow you can try to connect with 'ssh $scialias'\033[0m" || echo "Something went wrong, try again"
+  fi
+}
