@@ -58,6 +58,9 @@ list-keys () {
     else
       selected_key=$(( $user_pick-1 ))
       key_name="${keys_arr[$selected_key]}"; echo
+      if [[ $selected_key -lt 0 ]]; then
+        key_name=""
+      fi
       break
     fi
   done
