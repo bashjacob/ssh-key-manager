@@ -57,3 +57,27 @@ dir_config () {
   done
 }
 
+cfg () {
+  echo "What do you want to do?
+(1) Change ssh-keys directory
+(2) Add path to SSHKeyManager
+(q) Quit
+  "
+  read -n1 -p "Select: " cfg_option
+  while true; do
+    case "$cfg_option" in
+      1) dir_config
+        break
+      ;;
+      2) add_path
+        break
+      ;;
+      q|Q) echo -e "\nQuitting..."
+        break
+      ;;
+      *) echo "Wrong option"
+      ;;
+    esac
+  done
+  source $(dirname $0)/lib/var
+}
