@@ -31,7 +31,8 @@ What do you want to do?
         3) copy-id
           break
         ;;
-        4) echo "Configuration"
+        4) cfg
+          break
         ;;
         q|Q) echo "Quit"
           exit 0
